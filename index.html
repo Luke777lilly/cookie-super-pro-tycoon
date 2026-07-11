@@ -1,0 +1,100 @@
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; background: #0b0c10; color: #fff; user-select: none;">
+  
+  <!-- GLITCHING CHAMPION HEADER -->
+  <div style="font-size: 22px; font-weight: bold; color: #00ffcc; letter-spacing: 3px; text-shadow: 0 0 10px #00ffcc; margin-bottom: 5px; text-transform: uppercase;">⚡ COOKIE SUPER PRO TYCOON ⚡</div>
+  
+  <!-- YOUR MASSIVE GLOWING SCORE -->
+  <div id="scoreDisplay" style="font-size: 90px; font-weight: bold; color: #fff; text-shadow: 0 0 30px #00ffcc, 0 0 60px #00ffcc; margin-bottom: 10px;">0</div>
+  
+  <!-- SOLID SYSTEM EMOJI COOKIE -->
+  <div id="cookie" onclick="updateScore(1)" 
+       style="font-size: 140px; cursor: pointer; transition: transform 0.05s ease; display: inline-block; filter: drop-shadow(0 0 25px rgba(0,255,204,0.6)); margin: 10px 0;">
+    🍪
+  </div>
+  
+  <!-- GOD-TIER TRAINING CAMP SHOP -->
+  <div style="display: flex; flex-direction: column; gap: 8px; width: 290px; margin-top: 10px;">
+    <button id="buyBoxer" onclick="buyUpgrade('boxer')" style="padding: 10px; font-size: 14px; background: #e94560; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold;">🥊 Pro Boxer (Cost: 50)</button>
+    <button id="buyChamp" onclick="buyUpgrade('champ')" style="padding: 10px; font-size: 14px; background: #8a2be2; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold;">👑 Heavyweight Champ (Cost: 300)</button>
+    <button id="buyStadium" onclick="buyUpgrade('stadium')" style="padding: 10px; font-size: 14px; background: #238636; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold;">🏟️ Boxing Stadium (Cost: 1500)</button>
+    <button id="buyBelt" onclick="buyUpgrade('belt')" style="padding: 10px; font-size: 14px; background: #ffaa00; color: #111; border: none; border-radius: 50px; cursor: pointer; font-weight: bold;">🏆 WBA Title Belt (Cost: 10000)</button>
+    <button id="buyMultiverse" onclick="buyUpgrade('multi')" style="padding: 10px; font-size: 14px; background: linear-gradient(45deg, #ff007f, #7f00ff); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 4px rgba(255, 0, 127, 0.4); opacity: 0.6;">🌌 Cosmic Gym (Cost: 50000)</button>
+  </div>
+  
+  <div id="cpsDisplay" style="margin-top: 20px; font-size: 15px; color: #00ffcc; font-weight: bold; text-shadow: 0 0 5px #00ffcc;">CPS (cookies per second): 0</div>
+
+  <script>
+    let cookies = 0;
+    let boxers = 0;
+    let champs = 0;
+    let stadiums = 0;
+    let belts = 0;
+    let multis = 0;
+    
+    let boxerCost = 50;
+    let champCost = 300;
+    let stadiumCost = 1500;
+    let beltCost = 10000;
+    let multiCost = 50000;
+
+    function updateScore(amount) {
+      cookies += amount;
+      document.getElementById('scoreDisplay').innerText = cookies;
+      
+      const c = document.getElementById('cookie');
+      c.style.transform = 'scale(0.92)';
+      setTimeout(() => c.style.transform = 'scale(1)', 50);
+    }
+
+    function buyUpgrade(type) {
+      if (type === 'boxer' && cookies >= boxerCost) {
+        cookies -= boxerCost;
+        boxers += 1;
+        boxerCost = boxers === 1 ? 75 : Math.floor(boxerCost * 1.5); 
+        document.getElementById('buyBoxer').innerText = `🥊 Pro Boxer (Cost: ${boxerCost})`;
+      } else if (type === 'champ' && cookies >= champCost) {
+        cookies -= champCost;
+        champs += 1;
+        champCost = Math.floor(champCost * 1.6);
+        document.getElementById('buyChamp').innerText = `👑 Heavyweight Champ (Cost: ${champCost})`;
+      } else if (type === 'stadium' && cookies >= stadiumCost) {
+        cookies -= stadiumCost;
+        stadiums += 1;
+        stadiumCost = Math.floor(stadiumCost * 1.7);
+        document.getElementById('buyStadium').innerText = `🏟️ Boxing Stadium (Cost: ${stadiumCost})`;
+      } else if (type === 'belt' && cookies >= beltCost) {
+        cookies -= beltCost;
+        belts += 1;
+        beltCost = Math.floor(beltCost * 2.0);
+        document.getElementById('buyBelt').innerText = `🏆 WBA Title Belt (Cost: ${beltCost})`;
+      } else if (type === 'multi' && cookies >= multiCost) {
+        cookies -= multiCost;
+        multis += 1;
+        multiCost = Math.floor(multiCost * 2.2);
+        document.getElementById('buyMultiverse').innerText = `🌌 Cosmic Gym (Cost: ${multiCost})`;
+      }
+      
+      updateUI();
+    }
+
+    function updateUI() {
+      document.getElementById('scoreDisplay').innerText = cookies;
+      const totalSpeed = (boxers * 1) + (champs * 10) + (stadiums * 50) + (belts * 250) + (multis * 1000);
+      document.getElementById('cpsDisplay').innerText = `CPS (cookies per second): ${totalSpeed}`;
+      
+      document.getElementById('buyBoxer').style.opacity = cookies >= boxerCost ? '1' : '0.6';
+      document.getElementById('buyChamp').style.opacity = cookies >= champCost ? '1' : '0.6';
+      document.getElementById('buyStadium').style.opacity = cookies >= stadiumCost ? '1' : '0.6';
+      document.getElementById('buyBelt').style.opacity = cookies >= beltCost ? '1' : '0.6';
+      document.getElementById('buyMultiverse').style.opacity = cookies >= multiCost ? '1' : '0.6';
+    }
+
+    setInterval(() => {
+      const autoAmount = (boxers * 1) + (champs * 10) + (stadiums * 50) + (belts * 250) + (multis * 1000);
+      if (autoAmount > 0) {
+        updateScore(autoAmount);
+      }
+      updateUI();
+    }, 1000);
+  </script>
+</div>
